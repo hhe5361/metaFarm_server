@@ -1,9 +1,11 @@
 package app
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
 	"metafarm/internal/storage"
 	"net/http"
 	"strings"
@@ -74,12 +76,12 @@ func analysisHandler(storage storage.Storage, openaiKey string) gin.HandlerFunc 
 				"days_between_water": number of days between watering,
 				"days_to_maturity": number of days until maturity
 			}
-			Only respond with the JSON object, no additional text.`
+			Only respond with the JSON object, no additional text and no markdown.`
 
 			completionResp, err := client.CreateChatCompletion(
-				c.Request.Context(),
+				context.Background(),
 				openai.ChatCompletionRequest{
-					Model: openai.GPT4VisionPreview,
+					Model: openai.GPT4oMini,
 					Messages: []openai.ChatCompletionMessage{
 						{
 							Role: openai.ChatMessageRoleUser,
@@ -107,6 +109,7 @@ func analysisHandler(storage storage.Storage, openaiKey string) gin.HandlerFunc 
 
 			var result analysisResult
 			if err := json.Unmarshal([]byte(completionResp.Choices[0].Message.Content), &result); err != nil {
+				log.Printf("Failed to parse analysis result: %s", completionResp.Choices[0].Message.Content)
 				storage.UpdateAnalysisStatus(id, "failed", fmt.Sprintf("Failed to parse analysis result: %v", err))
 				return
 			}
