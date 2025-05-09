@@ -72,7 +72,7 @@ func analysisHandler(storage storage.Storage, openaiKey string) gin.HandlerFunc 
 
 			prompt := `Analyze this plant image and provide the following information in JSON format:
 			{
-				"name": "Korean name of the plant (prioritizing edible crops)",
+				"name": "Korean name of the plant (prioritize exact matching to one of these: 토마토, 딸기, 상추, 당근, 옥수수, 고추. For example, '로메인 상추' should be '상추', but '수박' should not match to any of these. Only use other names if none of these match exactly)",
 				"days_between_water": number of days between watering,
 				"days_to_maturity": number of days until harvest
 			}
