@@ -72,9 +72,9 @@ func analysisHandler(storage storage.Storage, openaiKey string) gin.HandlerFunc 
 
 			prompt := `Analyze this plant image and provide the following information in JSON format:
 			{
-				"name": "Korean name of the plant",
+				"name": "Korean name of the plant (prioritizing edible crops)",
 				"days_between_water": number of days between watering,
-				"days_to_maturity": number of days until maturity
+				"days_to_maturity": number of days until harvest
 			}
 			Only respond with the JSON object, no additional text and no markdown.`
 
